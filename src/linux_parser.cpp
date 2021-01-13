@@ -139,6 +139,7 @@ int LinuxParser::Helpers::GetProcesses(const std::string& name) {
   }
   return count;
 }
+
 int LinuxParser::TotalProcesses() { return Helpers::GetProcesses("processes"); }
 
 int LinuxParser::RunningProcesses() {
