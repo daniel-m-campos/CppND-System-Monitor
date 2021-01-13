@@ -3,5 +3,6 @@ a.out
 settings.json
 *.o
 build/*
+cmake-build-debug/
 *.json
 .idea/*
