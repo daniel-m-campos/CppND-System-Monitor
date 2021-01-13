@@ -106,8 +106,21 @@ long LinuxParser::UpTime() {
   return up_time;
 }
 
-// TODO: Read and return CPU utilization
-vector<string> LinuxParser::CpuUtilization() { return {}; }
+vector<string> LinuxParser::CpuUtilization() {
+  vector<string> cpu_utilization;
+  std::ifstream filestream(kProcDirectory + kStatFilename);
+  if (filestream) {
+    string line;
+    getline(filestream, line);
+    line = std::regex_replace(line, std::regex("cpu "), "");
+    std::istringstream line_stream(line);
+    string value;
+    while (line_stream >> value) {
+      cpu_utilization.emplace_back(value);
+    }
+  }
+  return cpu_utilization;
+}
 
 // TODO: Read and return the total number of processes
 int LinuxParser::TotalProcesses() { return 0; }

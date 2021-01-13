@@ -16,4 +16,11 @@ TEST_CASE("LinuxParser Tests", "[LinuxParserTests]") {
     auto up_time = LinuxParser::UpTime();
     CHECK(up_time > 0);
   }
+  SECTION("CpuUtilization") {
+    auto cpu_utilization = LinuxParser::CpuUtilization();
+    CHECK(!cpu_utilization.empty());
+    CHECK(cpu_utilization[0] != "cpu");
+    CHECK(std::stof(cpu_utilization[0]) > 0);
+    CHECK(cpu_utilization.size() == 10);
+  }
 }
