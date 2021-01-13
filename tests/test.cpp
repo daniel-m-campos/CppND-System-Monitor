@@ -9,7 +9,11 @@ using std::vector;
 
 TEST_CASE("LinuxParser Tests", "[LinuxParserTests]") {
   SECTION("MemoryUtilization") {
-    float mem_util = LinuxParser::MemoryUtilization();
+    auto mem_util = LinuxParser::MemoryUtilization();
     CHECK(mem_util > 0.0);
+  }
+  SECTION("UpTime") {
+    auto up_time = LinuxParser::UpTime();
+    CHECK(up_time > 0);
   }
 }
