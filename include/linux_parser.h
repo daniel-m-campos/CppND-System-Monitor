@@ -18,6 +18,11 @@ const std::string kVersionFilename{"/version"};
 const std::string kOSPath{"/etc/os-release"};
 const std::string kPasswordPath{"/etc/passwd"};
 
+// Helpers
+namespace Helpers {
+int GetProcesses(const std::string& name);
+}
+
 // System
 float MemoryUtilization();
 long UpTime();

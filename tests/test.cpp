@@ -27,4 +27,8 @@ TEST_CASE("LinuxParser Tests", "[LinuxParserTests]") {
     auto total_processes = LinuxParser::TotalProcesses();
     CHECK(total_processes > 0);
   }
+  SECTION("RunningProcesses") {
+    auto running_processes = LinuxParser::RunningProcesses();
+    CHECK(running_processes > 0);
+  }
 }
