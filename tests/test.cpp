@@ -4,7 +4,6 @@
 #include <vector>
 
 #include "catch2/catch.hpp"
-using std::vector;
 #include "linux_parser.h"
 
 TEST_CASE("LinuxParser Tests", "[LinuxParserTests]") {
@@ -30,5 +29,10 @@ TEST_CASE("LinuxParser Tests", "[LinuxParserTests]") {
   SECTION("RunningProcesses") {
     auto running_processes = LinuxParser::RunningProcesses();
     CHECK(running_processes > 0);
+  }
+  SECTION("Command") {
+    auto command = LinuxParser::Command(1);
+    auto pos = command.find("/sbin");
+    CHECK(pos == 0);
   }
 }
