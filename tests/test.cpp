@@ -23,4 +23,8 @@ TEST_CASE("LinuxParser Tests", "[LinuxParserTests]") {
     CHECK(std::stof(cpu_utilization[0]) > 0);
     CHECK(cpu_utilization.size() == 10);
   }
+  SECTION("TotalProcesses") {
+    auto total_processes = LinuxParser::TotalProcesses();
+    CHECK(total_processes > 0);
+  }
 }

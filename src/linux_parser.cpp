@@ -99,9 +99,9 @@ float LinuxParser::MemoryUtilization() {
 
 long LinuxParser::UpTime() {
   long up_time = 0;
-  std::ifstream stream(kProcDirectory + kUptimeFilename);
-  if (stream) {
-    stream >> up_time;
+  std::ifstream filestream(kProcDirectory + kUptimeFilename);
+  if (filestream) {
+    filestream >> up_time;
   }
   return up_time;
 }
@@ -122,8 +122,23 @@ vector<string> LinuxParser::CpuUtilization() {
   return cpu_utilization;
 }
 
-// TODO: Read and return the total number of processes
-int LinuxParser::TotalProcesses() { return 0; }
+int LinuxParser::TotalProcesses() {
+  int total_processes = 0;
+  std::ifstream filestream(kProcDirectory + kStatFilename);
+  if (filestream) {
+    string line;
+    string processes;
+    while (getline(filestream, line)) {
+      std::istringstream line_stream(line);
+      if (line_stream >> processes >> total_processes) {
+        if (processes == "processes") {
+          break;
+        }
+      }
+    }
+  }
+  return total_processes;
+}
 
 // TODO: Read and return the number of running processes
 int LinuxParser::RunningProcesses() { return 0; }
