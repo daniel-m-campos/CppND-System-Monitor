@@ -165,11 +165,7 @@ string LinuxParser::Command(int pid) {
 
 string LinuxParser::Ram(int pid) {
   auto path = kProcDirectory + to_string(pid) + kStatusFilename;
-  std::ifstream filestream(path);
-  if (filestream) {
-    return Helpers::GetValue<string>(path, "VmSize:");
-  }
-  throw std::runtime_error("Could not open: " + path);
+  return Helpers::GetValue<string>(path, "VmSize:");
 }
 
 // TODO: Read and return the user ID associated with a process
