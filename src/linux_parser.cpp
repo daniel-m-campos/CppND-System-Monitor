@@ -37,13 +37,13 @@ string LinuxParser::OperatingSystem() {
 }
 
 string LinuxParser::Kernel() {
-  string os, kernel;
+  string os, kernel, version;
   string line;
   std::ifstream stream(kProcDirectory + kVersionFilename);
   if (stream.is_open()) {
     std::getline(stream, line);
     std::istringstream linestream(line);
-    linestream >> os >> kernel;
+    linestream >> os >> version >> kernel;
   }
   return kernel;
 }
@@ -136,9 +136,8 @@ T LinuxParser::Helpers::GetValue(const string& path, const string& name) {
         }
       }
     }
-    throw std::runtime_error("Could not find value");
   }
-  throw std::runtime_error("Could not open: " + path);
+  return T();
 }
 
 int LinuxParser::Helpers::GetProcesses(const std::string& name) {
