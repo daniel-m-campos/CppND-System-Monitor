@@ -1,18 +1,36 @@
 # CppND-System-Monitor
 
-Starter code for System Monitor Project in the Object Oriented Programming Course of the [Udacity C++ Nanodegree Program](https://www.udacity.com/course/c-plus-plus-nanodegree--nd213). 
+## Requirements
 
-Follow along with the classroom lesson to complete the project!
+This submission uses `<filesystem>` which requires gcc version 9 or greater. To prepare the Ubuntu 16.04.6 LTS OS, run
+
+```bash
+sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
+sudo apt-get update
+sudo apt-get install gcc-snapshot
+sudo apt-get install gcc-9 g++-9
+
+export CC=/usr/bin/gcc-9
+export CXX=/usr/bin/g++-9
+```
+
+before `make build`. Alternative;y, just run `. setup.sh` from inside the project directory.
 
 ![System Monitor](images/monitor.png)
 
 ## Udacity Linux Workspace
-[Udacity](https://www.udacity.com/) provides a browser-based Linux [Workspace](https://engineering.udacity.com/creating-a-gpu-enhanced-virtual-desktop-for-udacity-497bdd91a505) for students. 
 
-You are welcome to develop this project on your local machine, and you are not required to use the Udacity Workspace. However, the Workspace provides a convenient and consistent Linux development environment we encourage you to try.
+[Udacity](https://www.udacity.com/) provides a browser-based
+Linux [Workspace](https://engineering.udacity.com/creating-a-gpu-enhanced-virtual-desktop-for-udacity-497bdd91a505) for
+students.
+
+You are welcome to develop this project on your local machine, and you are not required to use the Udacity Workspace.
+However, the Workspace provides a convenient and consistent Linux development environment we encourage you to try.
 
 ## ncurses
-[ncurses](https://www.gnu.org/software/ncurses/) is a library that facilitates text-based graphical output in the terminal. This project relies on ncurses for display output.
+
+[ncurses](https://www.gnu.org/software/ncurses/) is a library that facilitates text-based graphical output in the
+terminal. This project relies on ncurses for display output.
 
 Within the Udacity Workspace, `.student_bashrc` automatically installs ncurses every time you launch the Workspace.
 
