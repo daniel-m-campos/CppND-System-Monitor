@@ -5,6 +5,7 @@
 
 #include "catch2/catch.hpp"
 #include "linux_parser.h"
+#include "processor.h"
 
 TEST_CASE("LinuxParser Tests", "[LinuxParserTests]") {
   SECTION("MemoryUtilization") {
@@ -55,4 +56,11 @@ TEST_CASE("LinuxParser Tests", "[LinuxParserTests]") {
     CHECK(1 < pids.size());
     CHECK(pids.size() < 32768);
   }
+}
+
+TEST_CASE("Processor Tests", "[ProcessorTests]") {
+  Processor processor;
+  auto util = processor.Utilization();
+  CHECK(util > 0.0);
+  CHECK(util < 1.0);
 }
