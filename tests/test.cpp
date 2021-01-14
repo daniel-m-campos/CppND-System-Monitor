@@ -49,4 +49,5 @@ TEST_CASE("LinuxParser Tests", "[LinuxParserTests]") {
     CHECK(user == "root");
     CHECK_THROWS_AS(LinuxParser::User(-1), std::runtime_error);
   }
+  SECTION("UpTime") { CHECK_NOTHROW(LinuxParser::UpTime(1)); }
 }

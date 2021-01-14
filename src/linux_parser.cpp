@@ -194,6 +194,19 @@ string LinuxParser::User(int pid) {
   throw std::runtime_error("Could not open " + path);
 }
 
-// TODO: Read and return the uptime of a process
-// REMOVE: [[maybe_unused]] once you define the function
-long LinuxParser::UpTime(int pid [[maybe_unused]]) { return 0; }
+long LinuxParser::UpTime(int pid) {
+  auto path = kProcDirectory + to_string(pid) + kStatFilename;
+  std::ifstream filestream(path);
+  if (filestream) {
+    string line, word;
+    getline(filestream, line);
+    std::stringstream line_stream(line);
+    vector<string> words;
+    while (line_stream >> word) {
+      words.emplace_back(word);
+    }
+    auto start_time = std::stol(words[START_TIME_POS - 1]);
+    return start_time / sysconf(_SC_CLK_TCK);
+  }
+  throw std::runtime_error("Could not open " + path);
+}
