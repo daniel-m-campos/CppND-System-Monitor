@@ -16,6 +16,7 @@ if (BUILD_TESTS)
             src/linux_parser.cpp
             src/processor.cpp
             src/process.cpp
+            src/system.cpp
     )
     add_subdirectory(tests)
 endif ()

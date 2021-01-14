@@ -7,6 +7,7 @@
 #include "linux_parser.h"
 #include "process.h"
 #include "processor.h"
+#include "system.h"
 
 TEST_CASE("LinuxParser Tests", "[LinuxParserTests]") {
   SECTION("MemoryUtilization") {
@@ -43,7 +44,7 @@ TEST_CASE("LinuxParser Tests", "[LinuxParserTests]") {
   SECTION("Uid") {
     auto uid = LinuxParser::Uid(1);
     CHECK(uid == "0");
-    CHECK_THROWS_AS(LinuxParser::Uid(-1), std::runtime_error);
+    CHECK(LinuxParser::Uid(-1).empty());
   }
   SECTION("User") {
     auto user = LinuxParser::User(1);
@@ -77,4 +78,15 @@ TEST_CASE("Process Tests", "[ProcessTests]") {
   CHECK(!process.Ram().empty());
   CHECK(process.User() == "root");
   CHECK_NOTHROW(process.UpTime());
+}
+
+TEST_CASE("System Tests", "[SystemTests]") {
+  System system;
+  CHECK(system.Cpu().Utilization() > 0.0);
+  CHECK(!system.Processes().empty());
+  CHECK(system.MemoryUtilization() > 0);
+  CHECK(system.TotalProcesses() > 0);
+  CHECK(system.RunningProcesses() > 0);
+  CHECK(!system.Kernel().empty());
+  CHECK(system.OperatingSystem().find("Ubuntu") == 0);
 }
