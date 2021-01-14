@@ -122,22 +122,28 @@ vector<string> LinuxParser::CpuUtilization() {
   return cpu_utilization;
 }
 
-int LinuxParser::Helpers::GetProcesses(const std::string& name) {
-  int count = 0;
-  std::ifstream filestream(kProcDirectory + kStatFilename);
+template <typename T>
+T LinuxParser::Helpers::GetValue(const string& path, const string& name) {
+  T value;
+  string line;
+  string key;
+  std::ifstream filestream(path);
   if (filestream) {
-    string line;
-    string processes;
     while (getline(filestream, line)) {
       std::istringstream line_stream(line);
-      if (line_stream >> processes >> count) {
-        if (processes == name) {
-          break;
+      if (line_stream >> key >> value) {
+        if (key == name) {
+          return value;
         }
       }
     }
+    throw std::runtime_error("Could not find value");
   }
-  return count;
+  throw std::runtime_error("Could not open: " + path);
+}
+
+int LinuxParser::Helpers::GetProcesses(const std::string& name) {
+  return GetValue<int>(kProcDirectory + kStatFilename, name);
 }
 
 int LinuxParser::TotalProcesses() { return Helpers::GetProcesses("processes"); }
@@ -147,18 +153,24 @@ int LinuxParser::RunningProcesses() {
 }
 
 string LinuxParser::Command(int pid) {
-  string command;
   auto path = kProcDirectory + to_string(pid) + kCmdlineFilename;
   std::ifstream filestream(path);
   if (filestream) {
+    string command;
     getline(filestream, command);
+    return command;
   }
-  return command;
+  throw std::runtime_error("Could not open: " + path);
 }
 
-// TODO: Read and return the memory used by a process
-// REMOVE: [[maybe_unused]] once you define the function
-string LinuxParser::Ram(int pid [[maybe_unused]]) { return string(); }
+string LinuxParser::Ram(int pid) {
+  auto path = kProcDirectory + to_string(pid) + kStatusFilename;
+  std::ifstream filestream(path);
+  if (filestream) {
+    return Helpers::GetValue<string>(path, "VmSize:");
+  }
+  throw std::runtime_error("Could not open: " + path);
+}
 
 // TODO: Read and return the user ID associated with a process
 // REMOVE: [[maybe_unused]] once you define the function

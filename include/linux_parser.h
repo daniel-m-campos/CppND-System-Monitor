@@ -18,10 +18,11 @@ const std::string kVersionFilename{"/version"};
 const std::string kOSPath{"/etc/os-release"};
 const std::string kPasswordPath{"/etc/passwd"};
 
-// Helpers
 namespace Helpers {
+template <typename T>
+T GetValue(const std::string& path, const std::string& name);
 int GetProcesses(const std::string& name);
-}
+}  // namespace Helpers
 
 // System
 float MemoryUtilization();

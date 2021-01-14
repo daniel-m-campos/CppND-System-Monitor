@@ -35,4 +35,8 @@ TEST_CASE("LinuxParser Tests", "[LinuxParserTests]") {
     auto pos = command.find("/sbin");
     CHECK(pos == 0);
   }
+  SECTION("Ram") {
+    auto ram = LinuxParser::Ram(1);
+    CHECK(std::stof(ram) > 0);
+  }
 }
