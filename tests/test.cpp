@@ -19,9 +19,8 @@ TEST_CASE("LinuxParser Tests", "[LinuxParserTests]") {
   SECTION("CpuUtilization") {
     auto cpu_utilization = LinuxParser::CpuUtilization();
     CHECK(!cpu_utilization.empty());
-    CHECK(cpu_utilization[0] != "cpu");
-    CHECK(std::stof(cpu_utilization[0]) > 0);
     CHECK(cpu_utilization.size() == 10);
+    CHECK(cpu_utilization[LinuxParser::CPUStates::kUser_] > 0);
   }
   SECTION("TotalProcesses") {
     auto total_processes = LinuxParser::TotalProcesses();
@@ -55,6 +54,11 @@ TEST_CASE("LinuxParser Tests", "[LinuxParserTests]") {
     auto pids = LinuxParser::Pids();
     CHECK(1 < pids.size());
     CHECK(pids.size() < 32768);
+  }
+  SECTION("CpuUtilization(Pids)") {
+    auto pid_cpu_util = LinuxParser::CpuUtilization(1);
+    CHECK(pid_cpu_util > 0.0);
+    CHECK(pid_cpu_util < 1.0);
   }
 }
 

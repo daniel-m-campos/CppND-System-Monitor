@@ -1,10 +1,10 @@
 #include "linux_parser.h"
 
-#include <dirent.h>
 #include <unistd.h>
 
 #include <filesystem>
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 using std::stof;
@@ -100,17 +100,22 @@ long LinuxParser::UpTime() {
   return up_time;
 }
 
-vector<string> LinuxParser::CpuUtilization() {
-  vector<string> cpu_utilization;
+std::unordered_map<LinuxParser::CPUStates, long> LinuxParser::CpuUtilization() {
+  std::unordered_map<LinuxParser::CPUStates, long> cpu_utilization;
   std::ifstream filestream(kProcDirectory + kStatFilename);
   if (filestream) {
     string line;
     getline(filestream, line);
     line = std::regex_replace(line, std::regex("cpu "), "");
     std::istringstream line_stream(line);
-    string value;
-    while (line_stream >> value) {
-      cpu_utilization.emplace_back(value);
+    long value;
+    for (int state = CPUStates::kUser_; state <= CPUStates::kGuestNice_;
+         ++state) {
+      if (line_stream >> value) {
+        cpu_utilization.insert_or_assign((CPUStates)state, value);
+      } else {
+        throw std::runtime_error("Failed to parse cpu state.");
+      }
     }
   }
   return cpu_utilization;
@@ -188,19 +193,37 @@ string LinuxParser::User(int pid) {
   throw std::runtime_error("Could not open " + path);
 }
 
-long LinuxParser::UpTime(int pid) {
+vector<string> LinuxParser::Helpers::GetStats(int pid) {
   auto path = kProcDirectory + to_string(pid) + kStatFilename;
   std::ifstream filestream(path);
   if (filestream) {
     string line, word;
     getline(filestream, line);
     std::stringstream line_stream(line);
-    vector<string> words;
+    vector<string> stats;
     while (line_stream >> word) {
-      words.emplace_back(word);
+      stats.emplace_back(word);
     }
-    auto start_time = std::stol(words[START_TIME_POS - 1]);
-    return start_time / sysconf(_SC_CLK_TCK);
+    return stats;
   }
   throw std::runtime_error("Could not open " + path);
+}
+
+long LinuxParser::UpTime(int pid) {
+  auto stats = Helpers::GetStats(pid);
+  auto start_time = std::stol(stats[ProcessStats::kStarttime]);
+  return start_time / sysconf(_SC_CLK_TCK);
+}
+
+float LinuxParser::CpuUtilization(int pid) {
+  auto stats = Helpers::GetStats(pid);
+  vector times{ProcessStats::kUtime, ProcessStats::kStime,
+               ProcessStats::kCutime, ProcessStats::kCstime};
+  float total_time = 0;
+  for (auto& time : times) {
+    total_time += (float)std::stol(stats[time]);
+  }
+  total_time /= (float)sysconf(_SC_CLK_TCK);
+  auto seconds = (float)(UpTime() - UpTime(pid));
+  return total_time / seconds;
 }
