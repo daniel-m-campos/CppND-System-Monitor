@@ -1,11 +1,26 @@
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 3.14)
 project(monitor)
+
+set(CMAKE_CXX_STANDARD 17)
 
 find_package(Curses REQUIRED)
 include_directories(${CURSES_INCLUDE_DIRS})
 
 include_directories(include)
 file(GLOB SOURCES "src/*.cpp")
+
+set(BUILD_TESTS NO CACHE BOOL "Build test target")
+if (BUILD_TESTS)
+    add_library(
+            linux_parser
+            src/linux_parser.cpp
+            src/processor.cpp
+            src/process.cpp
+            src/system.cpp
+            src/format.cpp
+    )
+    add_subdirectory(tests)
+endif ()
 
 add_executable(monitor ${SOURCES})
 
