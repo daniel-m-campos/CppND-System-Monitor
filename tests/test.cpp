@@ -39,4 +39,8 @@ TEST_CASE("LinuxParser Tests", "[LinuxParserTests]") {
     auto ram = LinuxParser::Ram(1);
     CHECK(std::stof(ram) > 0);
   }
+  SECTION("Uid") {
+    auto uid = LinuxParser::Uid(1);
+    CHECK(uid == "0");
+  }
 }

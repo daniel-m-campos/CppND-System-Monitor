@@ -168,9 +168,10 @@ string LinuxParser::Ram(int pid) {
   return Helpers::GetValue<string>(path, "VmSize:");
 }
 
-// TODO: Read and return the user ID associated with a process
-// REMOVE: [[maybe_unused]] once you define the function
-string LinuxParser::Uid(int pid [[maybe_unused]]) { return string(); }
+string LinuxParser::Uid(int pid) {
+  auto path = kProcDirectory + to_string(pid) + kStatusFilename;
+  return Helpers::GetValue<string>(path, "Uid:");
+}
 
 // TODO: Read and return the user associated with a process
 // REMOVE: [[maybe_unused]] once you define the function
