@@ -50,4 +50,9 @@ TEST_CASE("LinuxParser Tests", "[LinuxParserTests]") {
     CHECK_THROWS_AS(LinuxParser::User(-1), std::runtime_error);
   }
   SECTION("UpTime") { CHECK_NOTHROW(LinuxParser::UpTime(1)); }
+  SECTION("Pids") {
+    auto pids = LinuxParser::Pids();
+    CHECK(1 < pids.size());
+    CHECK(pids.size() < 32768);
+  }
 }
