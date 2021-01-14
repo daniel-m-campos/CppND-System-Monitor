@@ -43,4 +43,8 @@ TEST_CASE("LinuxParser Tests", "[LinuxParserTests]") {
     auto uid = LinuxParser::Uid(1);
     CHECK(uid == "0");
   }
+  SECTION("User") {
+    auto user = LinuxParser::User(1);
+    CHECK(user == "root");
+  }
 }
