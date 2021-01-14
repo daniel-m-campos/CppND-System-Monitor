@@ -42,9 +42,11 @@ TEST_CASE("LinuxParser Tests", "[LinuxParserTests]") {
   SECTION("Uid") {
     auto uid = LinuxParser::Uid(1);
     CHECK(uid == "0");
+    CHECK_THROWS_AS(LinuxParser::Uid(-1), std::runtime_error);
   }
   SECTION("User") {
     auto user = LinuxParser::User(1);
     CHECK(user == "root");
+    CHECK_THROWS_AS(LinuxParser::User(-1), std::runtime_error);
   }
 }
