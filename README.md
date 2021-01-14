@@ -14,7 +14,7 @@ export CC=/usr/bin/gcc-9
 export CXX=/usr/bin/g++-9
 ```
 
-before `make build`. Alternative;y, just run `. setup.sh` from inside the project directory.
+before `make build`. Alternatively, just run `. setup.sh` from inside the project directory.
 
 ![System Monitor](images/monitor.png)
 
