@@ -11,7 +11,12 @@ file(GLOB SOURCES "src/*.cpp")
 
 set(BUILD_TESTS NO CACHE BOOL "Build test target")
 if (BUILD_TESTS)
-    add_library(linux_parser src/linux_parser.cpp src/processor.cpp)
+    add_library(
+            linux_parser
+            src/linux_parser.cpp
+            src/processor.cpp
+            src/process.cpp
+    )
     add_subdirectory(tests)
 endif ()
 

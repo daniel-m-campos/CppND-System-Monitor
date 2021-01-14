@@ -5,6 +5,7 @@
 
 #include "catch2/catch.hpp"
 #include "linux_parser.h"
+#include "process.h"
 #include "processor.h"
 
 TEST_CASE("LinuxParser Tests", "[LinuxParserTests]") {
@@ -67,4 +68,13 @@ TEST_CASE("Processor Tests", "[ProcessorTests]") {
   auto util = processor.Utilization();
   CHECK(util > 0.0);
   CHECK(util < 1.0);
+}
+
+TEST_CASE("Process Tests", "[ProcessTests]") {
+  Process process(1);
+  CHECK(process.CpuUtilization() > 0.0);
+  CHECK(process.Command().find("/sbin") == 0);
+  CHECK(!process.Ram().empty());
+  CHECK(process.User() == "root");
+  CHECK_NOTHROW(process.UpTime());
 }
