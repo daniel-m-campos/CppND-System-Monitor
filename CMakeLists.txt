@@ -17,6 +17,7 @@ if (BUILD_TESTS)
             src/processor.cpp
             src/process.cpp
             src/system.cpp
+            src/format.cpp
     )
     add_subdirectory(tests)
 endif ()

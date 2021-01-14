@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "catch2/catch.hpp"
+#include "format.h"
 #include "linux_parser.h"
 #include "process.h"
 #include "processor.h"
@@ -89,4 +90,19 @@ TEST_CASE("System Tests", "[SystemTests]") {
   CHECK(system.RunningProcesses() > 0);
   CHECK(!system.Kernel().empty());
   CHECK(system.OperatingSystem().find("Ubuntu") == 0);
+}
+
+TEST_CASE("Format Tests", "[FormatTests]") {
+  SECTION("Digits above 10") {
+    long seconds =
+        40 * Format::kSecondsInHour + 41 * Format::kSecondsInMinute + 42;
+    auto time = Format::ElapsedTime(seconds);
+    CHECK(Format::ElapsedTime(seconds) == "40:41:42");
+  }
+  SECTION("Digits under 10") {
+    long seconds =
+        7 * Format::kSecondsInHour + 8 * Format::kSecondsInMinute + 9;
+    auto time = Format::ElapsedTime(seconds);
+    CHECK(Format::ElapsedTime(seconds) == "07:08:09");
+  }
 }
