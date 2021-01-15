@@ -23,7 +23,7 @@ TEST_CASE("LinuxParser Tests", "[LinuxParserTests]") {
     auto cpu_utilization = LinuxParser::CpuUtilization();
     CHECK(!cpu_utilization.empty());
     CHECK(cpu_utilization.size() == 10);
-    CHECK(cpu_utilization[LinuxParser::CPUStates::kUser_] > 0);
+    CHECK(std::stof(cpu_utilization[LinuxParser::CPUStates::kUser_]) > 0);
   }
   SECTION("TotalProcesses") {
     auto total_processes = LinuxParser::TotalProcesses();

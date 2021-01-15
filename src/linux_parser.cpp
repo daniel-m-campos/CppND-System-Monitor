@@ -104,22 +104,17 @@ long LinuxParser::UpTime() {
   return up_time;
 }
 
-std::unordered_map<LinuxParser::CPUStates, long> LinuxParser::CpuUtilization() {
-  std::unordered_map<LinuxParser::CPUStates, long> cpu_utilization;
+vector<string> LinuxParser::CpuUtilization() {
+  vector<string> cpu_utilization;
   std::ifstream filestream(kProcDirectory + kStatFilename);
   if (filestream) {
     string line;
     getline(filestream, line);
     line = std::regex_replace(line, std::regex("cpu "), "");
     std::istringstream line_stream(line);
-    long value;
-    for (int state = CPUStates::kUser_; state <= CPUStates::kGuestNice_;
-         ++state) {
-      if (line_stream >> value) {
-        cpu_utilization.insert_or_assign((CPUStates)state, value);
-      } else {
-        throw std::runtime_error("Failed to parse cpu state.");
-      }
+    string value;
+    while (line_stream >> value) {
+      cpu_utilization.emplace_back(value);
     }
   }
   return cpu_utilization;
@@ -220,8 +215,8 @@ long LinuxParser::UpTime(int pid) {
 
 float LinuxParser::CpuUtilization(int pid) {
   auto stats = Helpers::GetStats(pid);
-  vector times{ProcessStats::kUtime, ProcessStats::kStime,
-               ProcessStats::kCutime, ProcessStats::kCstime};
+  vector<ProcessStats> times{ProcessStats::kUtime, ProcessStats::kStime,
+                             ProcessStats::kCutime, ProcessStats::kCstime};
   float total_time = 0;
   for (auto& time : times) {
     total_time += (float)std::stol(stats[time]);

@@ -48,7 +48,7 @@ enum CPUStates {
   kGuestNice_
 };
 
-std::unordered_map<LinuxParser::CPUStates, long> CpuUtilization();
+std::vector<std::string> CpuUtilization();
 
 // Processes
 enum ProcessStats {

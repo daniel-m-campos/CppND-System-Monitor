@@ -3,7 +3,7 @@
 
 class Processor {
  public:
-  float Utilization();
+  static float Utilization();
 
  private:
 };
