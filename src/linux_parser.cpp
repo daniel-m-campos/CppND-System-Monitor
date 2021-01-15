@@ -12,8 +12,6 @@ using std::string;
 using std::to_string;
 using std::vector;
 
-namespace fs = std::filesystem;
-
 string LinuxParser::OperatingSystem() {
   string line;
   string key;
