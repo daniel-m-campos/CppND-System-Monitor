@@ -220,7 +220,7 @@ float LinuxParser::CpuUtilization(int pid) {
                              ProcessStats::kCutime, ProcessStats::kCstime};
   float total_time = 0;
   for (auto& time : times) {
-    total_time += (float)std::stol(stats[time]);
+    total_time += std::stof(stats[time]);
   }
   total_time /= (float)sysconf(_SC_CLK_TCK);
   auto seconds = (float)UpTime(pid);
