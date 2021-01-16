@@ -74,7 +74,8 @@ float LinuxParser::MemoryUtilization() {
   };
 
   std::ifstream filestream(kProcDirectory + kMeminfoFilename);
-  float mem_util = 0.0;
+  float mem_total = 0.0;
+  float mem_free = 0.0;
   if (filestream) {
     string line;
     string key;
@@ -85,14 +86,14 @@ float LinuxParser::MemoryUtilization() {
       std::istringstream line_stream(line);
       while (line_stream >> key >> dirty_value) {
         if (key == "MemTotal") {
-          mem_util += CleanValue(dirty_value);
-        } else if (key == "dirty_value") {
-          mem_util -= CleanValue(dirty_value);
+          mem_total = CleanValue(dirty_value);
+        } else if (key == "MemFree") {
+          mem_free = CleanValue(dirty_value);
         }
       }
     }
   }
-  return mem_util;
+  return (mem_total - mem_free) / mem_total;
 }
 
 long LinuxParser::UpTime() {
