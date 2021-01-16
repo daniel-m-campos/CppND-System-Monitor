@@ -4,7 +4,6 @@
 #include <unistd.h>
 
 #include <string>
-#include <unordered_map>
 #include <vector>
 
 using std::stof;
@@ -193,25 +192,26 @@ string LinuxParser::User(int pid) {
 }
 
 vector<string> LinuxParser::Helpers::GetStats(int pid) {
+  vector<string> stats;
   auto path = kProcDirectory + to_string(pid) + kStatFilename;
   std::ifstream filestream(path);
   if (filestream) {
     string line, word;
     getline(filestream, line);
     std::stringstream line_stream(line);
-    vector<string> stats;
     while (line_stream >> word) {
       stats.emplace_back(word);
     }
-    return stats;
   }
-  throw std::runtime_error("Could not open " + path);
+  return stats;
 }
 
 long LinuxParser::UpTime(int pid) {
   auto stats = Helpers::GetStats(pid);
   auto start_time = std::stol(stats[ProcessStats::kStarttime]);
-  return start_time / sysconf(_SC_CLK_TCK);
+  long up_time = UpTime();
+  up_time -= start_time / sysconf(_SC_CLK_TCK);
+  return up_time;
 }
 
 float LinuxParser::CpuUtilization(int pid) {
@@ -223,6 +223,6 @@ float LinuxParser::CpuUtilization(int pid) {
     total_time += (float)std::stol(stats[time]);
   }
   total_time /= (float)sysconf(_SC_CLK_TCK);
-  auto seconds = (float)(UpTime() - UpTime(pid));
+  auto seconds = (float)UpTime(pid);
   return total_time / seconds;
 }
