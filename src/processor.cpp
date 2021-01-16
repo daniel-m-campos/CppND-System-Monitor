@@ -9,9 +9,9 @@ float Processor::Utilization() {
   auto GetState = [&cpu_util](CPUStates state) {
     return std::stof(cpu_util[state]);
   };
-  float total_idle =
+  const float total_idle =
       GetState(CPUStates::kIdle_) + GetState(CPUStates::kIOwait_);
-  float total_active =
+  const float total_active =
       GetState(CPUStates::kUser_) + GetState(CPUStates::kNice_) +
       GetState(CPUStates::kSystem_) + GetState(CPUStates::kIRQ_) +
       GetState(CPUStates::kSoftIRQ_) + GetState(CPUStates::kSteal_);
